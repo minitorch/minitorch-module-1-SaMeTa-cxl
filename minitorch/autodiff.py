@@ -23,8 +23,10 @@ def central_difference(f: Any, *vals: Any, arg: int = 0, epsilon: float = 1e-6) 
         An approximation of $f'_i(x_0, \ldots, x_{n-1})$
     """
     # TODO: Implement for Task 1.1.
-    raise NotImplementedError("Need to implement for Task 1.1")
-
+    # raise NotImplementedError("Need to implement for Task 1.1")
+    delta = f(*(vals[:arg]), vals[arg] + epsilon, *(vals[arg + 1:])) - f(*vals)
+    slope = delta / epsilon
+    return slope
 
 variable_count = 1
 
@@ -62,7 +64,28 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
         Non-constant Variables in topological order starting from the right.
     """
     # TODO: Implement for Task 1.4.
-    raise NotImplementedError("Need to implement for Task 1.4")
+    # raise NotImplementedError("Need to implement for Task 1.4")
+    stack = [variable]
+    # get num of output of every variable
+    while len(stack) != 0:
+        now = stack.pop(0)
+        for parent in now.parents:
+            if not parent.is_constant():
+                parent.num_output += 1
+                stack.append(parent)
+    
+    right_most_set = [variable]
+    result = []
+    # calculate topo order
+    while len(right_most_set) != 0:
+        now = right_most_set.pop()
+        result.append(now)
+        for parent in now.parents:
+            parent.num_output -= 1
+            if parent.num_output == 0:
+                right_most_set.append(parent)
+
+    return result
 
 
 def backpropagate(variable: Variable, deriv: Any) -> None:
@@ -77,7 +100,15 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
     No return. Should write to its results to the derivative values of each leaf through `accumulate_derivative`.
     """
     # TODO: Implement for Task 1.4.
-    raise NotImplementedError("Need to implement for Task 1.4")
+    # raise NotImplementedError("Need to implement for Task 1.4")
+    topo_order = topological_sort(variable)
+    variable.accumulate_derivative(deriv)
+    for var in topo_order:
+        if var.is_leaf():
+            continue
+        result = var.chain_rule(var.derivative)
+        for var_input, d_input in result:
+            var_input.accumulate_derivative(d_input)
 
 
 @dataclass
