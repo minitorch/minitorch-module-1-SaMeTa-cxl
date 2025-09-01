@@ -75,7 +75,7 @@ class Module:
             result.append(param)
         
         for child in self._modules.values():
-            result += child.named_parameters()
+            result += child.parameters()
         
         return result
         # TODO: Implement for Task 0.4.

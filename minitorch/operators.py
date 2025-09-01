@@ -67,11 +67,11 @@ def is_close(a: float, b: float) -> bool:
 
 def sigmoid(a: float) -> float:
     r"""Calculate sigmoid(a) as f(x) =  \frac{1.0}{(1.0 + e^{-x})}$ if x >=0 else $\frac{e^x}{(1.0 + e^{x})}"""
-    return 1 / (1 + math.exp(-a)) if a >= 0 else math.exp(a) / (1 + math.exp(a))
+    return 1.0 / (1.0 + math.exp(-a)) if a >= 0.0 else math.exp(a) / (1.0 + math.exp(a))
 
 def relu(a: float) -> float:
     """f(x) = max(0, a)"""
-    return max(0, a)
+    return max(0.0, a)
 
 def log(a: float) -> float:
     """ln(x)"""
@@ -87,7 +87,7 @@ def log_back(a: float, b: float) -> float:
 
 def inv(a: float) -> float:
     """1 / x"""
-    return 1 / a
+    return 1.0 / a
 
 def inv_back(a: float, b: float) -> float:
     """The derivitive of (1 / a) *b"""
@@ -95,7 +95,7 @@ def inv_back(a: float, b: float) -> float:
 
 def relu_back(a: float, b: float) -> float:
     """The derivitive of relu(a) * b"""
-    return b if a >= 0 else 0
+    return b if a >= 0.0 else 0.0
 
 
 
